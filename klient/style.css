@@ -1,0 +1,28 @@
+#body {
+  margin: 0px;
+}
+
+#all {
+  display: grid;
+  grid-template-rows: 100vh;
+  grid-template-columns: 100%;
+  gap: 10px;
+}
+
+#main {
+  display: flex;
+  background-color: aqua;
+
+  justify-content: center;
+}
+
+.divy {
+  border: solid black 5px;
+  border-radius: 5px;
+  background-color: bisque;
+  height: 100px;
+  width: 400px;
+  display: grid;
+  grid-template-rows: 33% 34% 33%;
+  grid-template-columns: 100%;
+}
