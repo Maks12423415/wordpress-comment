@@ -1,47 +1,66 @@
 async function getData() {
-  const data = await fetch(
-    "http://localhost:80/wordpress/wp-json/wp/v2/comments"
+  const commentsData = await fetch(
+    "http://localhost/wordpress/wp-json/wp/v2/comments"
   );
+  const comments = await commentsData.json();
 
-  const json = await data.json();
+  for (let i in comments) {
+    const comment = comments[i];
 
-  console.log(json);
-
-  for (let i in json) {
     const div = document.createElement("div");
     div.classList.add("divy");
 
     const p = document.createElement("p");
-    p.innerHTML = json[i].content.rendered;
+    p.innerHTML = comment.content.rendered;
 
     if (
-      json[i].content.rendered.includes("kupa") ||
-      json[i].content.rendered.includes("Kupa")
+      comment.content.rendered.includes("kupa") ||
+      comment.content.rendered.includes("Kupa")
     ) {
       div.style.backgroundColor = "red";
       const button = document.createElement("button");
       button.innerHTML = "DELETE";
       button.addEventListener("click", () => {
-        changeStatus(json[i].id);
+        changeStatus(comment.id);
       });
       div.appendChild(button);
     } else {
       console.log("jest git");
     }
 
-    div.appendChild(p);
+    if (comment.post && comment.post !== 0) {
+      const post = await fetchPost(comment.post);
+      if (post) {
+        const h1 = document.createElement("h1");
+        h1.innerHTML = post.title.rendered;
+        div.appendChild(h1);
+      }
+    }
 
+    div.appendChild(p);
     document.querySelector("#main").appendChild(div);
   }
 }
-getData();
 
-async function changeStatus(id) {
+async function fetchPost(postId) {
   const url = new URL(
-    `http://localhost:80/wordpress/wp-json/wp/v2/comments/${id}`
+    `http://localhost/wordpress/wp-json/wp/v2/posts/${postId}`
   );
-
   const data = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Basic ${btoa("Maks:zaq12wsx")}`,
+    },
+  });
+  return data.json();
+}
+
+async function changeStatus(commentId) {
+  const url = new URL(
+    `http://localhost/wordpress/wp-json/wp/v2/comments/${commentId}`
+  );
+  await fetch(url, {
     method: "DELETE",
     headers: {
       authorization: `Basic ${btoa("Maks:zaq12wsx")}`,
@@ -49,3 +68,5 @@ async function changeStatus(id) {
   });
   location.reload();
 }
+
+getData();

@@ -13,16 +13,15 @@
   display: flex;
   background-color: aqua;
 
-  justify-content: center;
+  gap: 10px;
 }
 
 .divy {
   border: solid black 5px;
   border-radius: 5px;
   background-color: bisque;
-  height: 100px;
-  width: 400px;
-  display: grid;
-  grid-template-rows: 33% 34% 33%;
-  grid-template-columns: 100%;
+  height: 200px;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
 }
